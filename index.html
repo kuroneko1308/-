@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ถึงแก้มกลมของพี่ 💌</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Sarabun', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    #envelopePage {
+      background: radial-gradient(circle at top, #fff0f5 0%, #ffe4e1 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 400px;
+      height: 300px;
+      cursor: pointer;
+      perspective: 1200px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .envelope {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      transition: transform 1s ease;
+    }
+
+    .envelope-wrapper:hover .envelope {
+      transform: rotateX(-180deg);
+    }
+
+    .front, .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      backface-visibility: hidden;
+    }
+
+    .front {
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5em;
+      transform: rotateX(0deg);
+      transition: transform 0.6s ease;
+    }
+
+    .front::before {
+      content: "\1F48C";
+    }
+
+    .back {
+      background: #fff5f7;
+      transform: rotateX(180deg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5em;
+      color: #880e4f;
+      padding: 1em;
+      box-sizing: border-box;
+    }
+
+    .click-text {
+      position: absolute;
+      bottom: -60px;
+      width: 100%;
+      text-align: center;
+      font-size: 1.3em;
+      color: #880e4f;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    #mainPage {
+      display: none;
+      background: linear-gradient(to bottom, #ffe6f0, #fff5f9);
+      color: #880e4f;
+      text-align: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-top: 2em;
+    }
+
+    #typewriter {
+      font-size: 1.6em;
+      margin: 1em auto;
+      width: 80%;
+      max-width: 600px;
+      min-height: 5em;
+      white-space: pre-wrap;
+    }
+
+    .heart {
+      color: red;
+      font-size: 4em;
+      animation: heartbeat 1s infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+
+    .btn {
+      margin-top: 2em;
+      padding: 1em 2em;
+      background: #f06292;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #ec407a;
+    }
+
+    footer {
+      margin-top: 3em;
+      font-size: 0.9em;
+      color: #777;
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      user-select: none;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    #memories {
+      margin-top: 2em;
+      display: none;
+    }
+
+    #memories img {
+      width: 300px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #ccc;
+    }
+
+    #page2 {
+      display: none;
+      padding: 2em;
+      max-width: 700px;
+      margin: 3em auto;
+      background: rgba(255, 240, 250, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255,182,193,0.6);
+      color: #880e4f;
+      font-size: 1.2em;
+      line-height: 1.6em;
+      user-select: text;
+    }
+
+    #page2 h2 {
+      margin-bottom: 1em;
+    }
+
+    #page2 p {
+      white-space: pre-line;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div id="envelopePage" onclick="startLoveLetter()">
+    <div class="envelope-wrapper">
+      <div class="envelope">
+        <div class="front"></div>
+        <div class="back"> คลิกเพื่ออ่านจดหมายจากใจพี่ </div>
+      </div>
+      <div class="click-text">แตะเพื่อเปิดหัวใจพี่ดูสิ 💖</div>
+    </div>
+  </div>
+
+  <div id="mainPage">
+    <canvas id="flower"></canvas>
+    <div id="page1">
+      <h1>ถึงแก้มกลมของพี่ 💖</h1>
+      <div class="heart">💗</div>
+      <p id="typewriter"></p>
+      <button class="btn" onclick="goToPage2()">ลองกดดูสิ </button>
+      <div id="memories">
+        <img src="https://placekitten.com/400/300" alt="ความทรงจำ" />
+        <p>นี่คือสิ่งที่พี่อยากจะบอกหนู 🥰</p>
+      </div>
+      <footer>จากใจของพี่... คนที่รักหนูมากที่สุดในโลก 🌍</footer>
+    </div>
+    <div id="page2">
+      <h2>💌 ข้อความจากหัวใจของพี่ 💌</h2>
+      <p>
+        พี่เป็นคนซื่อบื่อ หนูก็คงรู้ เรื่องคำพูดหวาน ๆ หรือ การปลอบใจพี่ไม่ค่อยเก่งอะไรพวกนี้เลย  
+        พี่เป็นพวกขี้อาย ไม่ค่อยถ่ายรูป เป็นอินโทรเวิร์ต ไม่ได้หวานขนาดนั้น
+        ข้อเสียของพี่มีเยอะแยะเลย  
+        บางทีก็คิดว่าพี่จะเหมาะสมกับหนูรึป่าว  
+
+        แต่พอได้คุยกันมาสักพัก ได้ใกล้กันมากขึ้น  
+        พี่กลับรู้สึกดี แล้วก็ชอบหนูมาก ๆ  
+        หนูทำให้พี่ตาสว่าง ไม่กลัวอดีตของพี่เลย  
+        แถมหนูยังน่ารักมากอีกตะหาก  
+
+        พี่แค่อยากบอกว่า...  
+        ตั้งแต่ได้เจอหนู โลกของพี่ก็เบาขึ้นเยอะเลย  
+        ขอบคุณนะครับ ที่คอยปลอบ คอยอยู่ด้วย ให้ความอบอุ่นกับพี่ ให้ความสบายใจกับพี่  
+        พี่จะพยายามเป็นแฟนที่ดีนะครับ 🫶  
+
+        ปล. พี่อยากเก็บความทรงจำดี ๆ กับหนูไว้เยอะ ๆ เลย  
+        ถ้าหนูมีเวลา พี่อยากชวนหนูกรอกแบบฟอร์มนี้ให้พี่หน่อยนะ 🥺💕
+      </p>
+      <button onclick="openGoogleForm()" class="btn" style="margin-top: 1.5em;">เปิดฟอร์ม Google Form เพื่อบอกพี่ 😊</button>
+    </div>
+  </div>
+
+  <audio id="bgmusic" autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    const message = "พี่อาจไม่ใช่คนที่เพอร์เฟกต์ที่สุดในโลก...\nแต่พี่สัญญาว่าจะรักหนูในทุก ๆ วัน\nไม่ว่าพรุ่งนี้จะเป็นยังไง... หนูจะยังคงเป็น 'คนที่พี่เลือก' เสมอ 💌";
+    const typewriter = document.getElementById("typewriter");
+    let i = 0;
+
+    function typeEffect() {
+      if (i < message.length) {
+        typewriter.innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeEffect, 70);
+      }
+    }
+
+    function startLoveLetter() {
+      document.getElementById('envelopePage').style.display = 'none';
+      document.getElementById('mainPage').style.display = 'block';
+      typeEffect();
+    }
+
+    const canvas = document.getElementById('flower');
+    const ctx = canvas.getContext('2d');
+    let W = window.innerWidth;
+    let H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    let petals = [];
+    for (let i = 0; i < 50; i++) {
+      petals.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 5 + 2,
+        d: Math.random() * 1,
+        color: `rgba(255,182,193,${Math.random()})`
+      });
+    }
+
+    function drawPetals() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < petals.length; i++) {
+        let p = petals[i];
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      }
+      update();
+    }
+
+    function update() {
+      for (let i = 0; i < petals.length; i++) {
+        let p = petals[i];
+        p.y += p.d + 1;
+        p.x += Math.sin(p.y * 0.01);
+        if (p.y > H) {
+          petals[i].y = 0;
+          petals[i].x = Math.random() * W;
+        }
+      }
+    }
+
+    setInterval(drawPetals, 30);
+
+    window.addEventListener("resize", () => {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W;
+      canvas.height = H;
+    });
+
+    function goToPage2() {
+      document.getElementById('page1').style.display = 'none';
+      document.getElementById('page2').style.display = 'block';
+    }
+
+    function openGoogleForm() {
+      window.open('https://docs.google.com/forms/d/e/1FAIpQLSeMtrdA_Lz-VFfueqX0tQAp01RAGPLZPMSP9Hnxnk8Sm0ykHg/viewform?usp=header', '_blank');
+    }
+  </script>
+</body>
+</html>
